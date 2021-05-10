@@ -248,13 +248,14 @@ void process_command(char* req) {
              "wetter %d\r\n"
              "chamber %d\r\n"
              "uptime %lld\r\n"
-             "%s\r\n",
+             "%s\r\n" 
              "%s",
              c_temperature, c_humidity, heating, cooling, wetting, chamber,
              time(NULL) - begin_timer + set_coef, 
              (overheat ? "overheat\r\n" : ""),
              (changed ? "changed\r\n" : ""));
     changed = 0;
+    wetting = OFF;
     printf("C: T=%f, Hd=%f, H%dW%dC%dCh%d\n", 
            c_temperature, c_humidity, heating, wetting, cooling, chamber);
   } else if (strcmp(argv[0], "request_config") == 0) {
@@ -331,14 +332,10 @@ void process_temperature() {
 }
 
 void process_humidity() {
-  if (wetting) {
-    c_humidity += 0.05;
-  }
   c_humidity -= 0.01;
   if (c_humidity  <= n_humidity - 10) {
+    c_humidity = n_humidity; 
     wetting = ON;
-  } else if (c_humidity >= n_humidity) {
-    wetting = OFF;
   }
 }
 
