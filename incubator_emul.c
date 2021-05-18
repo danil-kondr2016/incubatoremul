@@ -306,6 +306,10 @@ void process_command(char* req) {
     time_t new_uptime = atoll(argv[1]);
     set_coef = new_uptime - (time(NULL) - begin_timer);
     strncpy(cmd_answer, "success\r\n", 1024);
+  } else if (strcmp(argv[0], "rotate_to") == 0) {
+    chamber = atoi(argv[1]);
+    last_rotation = time(NULL);
+    strncpy(cmd_answer, "success\r\n", 1024);
   }
 
   snprintf(response_buffer, MAX_RESPONSE_BUFFER_LENGTH,
